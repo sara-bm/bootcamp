@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ team.name }} – Week {{ week_num }}</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .member-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            opacity: 0; /* Initial state for animation */
+            transform: translateY(20px); /* Initial state for animation */
+            animation: slideIn 0.5s ease forwards;
+        }
+
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: #fff;
+            overflow: hidden; /* Hide overflow for image */
+        }
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the area without distortion */
+        }
+        .member-info h3 {
+            margin: 0 0 5px 0;
+            color: #555;
+        }
+        .member-info p {
+            margin: 0;
+            color: #777;
+            font-size: 0.9em;
+        }
+        .no-members {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+        }
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            z-index: 1000;
+        }
+        .fab:hover {
+            background-color: #218838;
+        }
+        .add-member-form {
+            display: none; /* Hidden by default */
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .add-member-form h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-group input[type="text"] {
+            width: calc(100% - 22px); /* Adjust for padding and border */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .member-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .member-avatar {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">← Back to Home</a>
+        <h1>{{ team.name }} – Week {{ week_num }}</h1>
+
+        {% if team.members %}
+            <ul class="member-list">
+                {% for member in team.members %}
+                    <li class="member-item">
+                        <div class="member-avatar">
+                            {% if member.image %}
+                                <img src="{{ url_for('static', filename='images/' + member.image) }}" alt="{{ member.name }}'s avatar">
+                            {% else %}
+                                {{ member.name[0] if member.name else '?' }}
+                            {% endif %}
+                        </div>
+                        <div class="member-info">
+                            <h3>{{ member.name }}</h3>
+                            <p>{{ member.role }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="no-members">
+                No members yet. Add members below.
+            </div>
+        {% endif %}
+
+        <div class="add-member-form" id="addMemberForm">
+            <h2>Add New Member</h2>
+            <form action="{{ url_for('add_member', team_id=team.name) }}" method="post">
+                <input type="hidden" name="week_num" value="{{ week_num }}">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role:</label>
+                    <input type="text" id="role" name="role" required>
+                </div>
+                <div class="form-group">
+                    <label for="image">Image URL (Optional):</label>
+                    <input type="text" id="image" name="image">
+                </div>
+                <div class="form-group">
+                    <button type="submit">Add Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="fab" id="fabButton">+</div>
+
+    <script>
+        const fabButton = document.getElementById('fabButton');
+        const addMemberForm = document.getElementById('addMemberForm');
+
+        fabButton.addEventListener('click', () => {
+            addMemberForm.style.display = addMemberForm.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>
+</body>
+</html>

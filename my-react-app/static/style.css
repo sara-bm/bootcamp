@@ -1,0 +1,80 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f8f8f8; /* White background */
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.card-list {
+    display: flex;
+    overflow-x: auto; /* Make the list scrollable horizontally */
+    padding-bottom: 20px; /* Add some padding for the scrollbar */
+    gap: 20px; /* Space between cards */
+}
+
+.card {
+    flex: 0 0 300px; /* Prevent cards from shrinking, set a base width */
+    background-color: #fff; /* White card background */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
+    padding: 20px;
+    text-align: center;
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #555;
+    font-weight: bold; /* Bold title */
+    margin-bottom: 20px;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2x2 grid */
+    gap: 10px; /* Space between buttons */
+}
+
+.team-button {
+    display: block;
+    padding: 15px;
+    background-color: #007bff; /* Vibrant blue button */
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.team-button:hover {
+    background-color: #0056b3;
+}
+
+/* Optional: Style for scrollbar */
+.card-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.card-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.card-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.card-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

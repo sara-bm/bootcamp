@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Challenge Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Coding Challenge Weeks</h1>
+        <div class="card-list">
+            {% for week in weeks %}
+            <div class="card">
+                <h2>Week {{ week }}: Coding Challenge</h2>
+                <div class="button-grid">
+                    {% for team in teams %}
+                    <a href="{{ url_for('team_details', week=week, team=team) }}" class="team-button">Team {{ team }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
